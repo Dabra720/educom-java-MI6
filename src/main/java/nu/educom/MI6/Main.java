@@ -10,6 +10,8 @@ public class Main {
       List<Agent> Agents = new ArrayList<>();
       Scanner scanner = new Scanner(System.in);
       boolean check;
+
+      mainloop:
       do{
           while(true){
               System.out.println("Enter your service-number: ");
@@ -67,52 +69,16 @@ public class Main {
                           System.out.println("Number: " + Agent);
                       }
                   }
+                  case "4" -> {
+                      break mainloop;
+                  }
                   default -> System.out.println("Not a valid option.");
               }
 
           }
 
       } while (true);
-
-
-//    Agent p = new Agent();
-//    do {
-//
-//      System.out.println("Hello MI6 Agent");
-//
-//      Scanner scanner = new Scanner(System.in);
-//
-//      do {
-//        System.out.println("Please enter your service-number:");
-//        // nextLine gebruikt omdat anders de volgende nextLine niet werkt
-//        String input = scanner.nextLine();
-//        if (input.length() > 3) {
-//          System.out.println("Number cannot have more than 3 characters, try again.");
-//          continue;
-//        }
-//        if (p.isNumeric(input)) {
-//          p.setServiceNumber(Integer.parseInt(input));
-//          if (p.validateNumber()) {
-//            System.out.println("That is not a valid number, try again.");
-//          }
-//        } else {
-//          System.out.println("That is not a number, try again.");
-//        }
-//
-//      } while (p.validateNumber());
-//
-//      System.out.println("Hello agent " + p.getServiceNumber());
-//
-//      System.out.println("Please enter the secret phrase:");
-//      String phrase = scanner.nextLine();
-//      if (p.validateSecretPhrase(phrase)) {
-//        System.out.println("Welcome back agent " + p.getServiceNumber());
-//      } else {
-//        p.setBlackList(true);
-//        blackList.add(p.getServiceNumber());
-//        System.out.println("You have been blacklisted, agent " + p.getServiceNumber());
-//      }
-//    } while (blackList.contains(p.getServiceNumber()));
+      System.out.println("EXITING THE PROGRAM!");
   }
 
   public static boolean validateNumber(String input){

@@ -3,13 +3,13 @@ package nu.educom.MI6;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+//import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         List<String> blackList = new ArrayList<>();
         List<Agent> Agents = new ArrayList<>();
-        Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
         JFrame frame = new JFrame("Inputdialog");
         boolean check;
 
@@ -56,9 +56,12 @@ public class Main {
 //              System.out.println("Choose your next action:");
 //              System.out.println("(1)Log in    (2)Show all logged in members    (3)Show all blacklisted members    (4)EXIT");
 //              String action = scanner.nextLine();
-                String action = JOptionPane.showInputDialog(frame, "Choose your next action: \n" +
-                        "(1)Log in    \n(2)Show all logged in members \n" +
-                        "(3)Show all blacklisted members    \n(4)EXIT");
+                String action = JOptionPane.showInputDialog(frame, """
+                        Choose your next action:\s
+                        (1)Log in   \s
+                        (2)Show all logged in members\s
+                        (3)Show all blacklisted members   \s
+                        (4)EXIT""");
 
                 switch (action) {
                     case "1" ->

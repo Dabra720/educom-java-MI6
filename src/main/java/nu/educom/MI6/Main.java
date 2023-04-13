@@ -1,22 +1,25 @@
 package nu.educom.MI6;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         List<String> blackList = new ArrayList<>();
         List<Agent> Agents = new ArrayList<>();
-//        Scanner scanner = new Scanner(System.in);
         JFrame frame = new JFrame("Inputdialog");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(350,250);
         boolean check;
 
         mainloop:
         do{
             while(true){
-//              System.out.println("Enter your service-number: ");
+                JPanel panel = new JPanel();
+                panel.setLayout(new GridLayout(3,1));
+
                 String input = JOptionPane.showInputDialog(frame, "Enter your service-number: ");
 
                 if(validateNumber(input)){
@@ -24,7 +27,6 @@ public class Main {
                     if(!blackList.contains(input)){
                         Agents.add(new Agent(input));
                     }else{
-//                      System.out.println("This agent is blacklisted");
                         JOptionPane.showMessageDialog(null, "ACCESS DENIED!",
                                 "Error", JOptionPane.ERROR_MESSAGE);
                         continue;
@@ -33,14 +35,10 @@ public class Main {
                 }
             }
 
-//          while(true){
-//              System.out.println("Enter the secret passphrase:");
             Agent p = Agents.get(Agents.size()-1);
             String input = JOptionPane.showInputDialog(frame, "Enter the secret passphrase:");
             if(validatePass(input)){
                 p.setLoggedIn(true);
-//                  System.out.println("Welcome Agent " + p.getServiceNumber());
-//                  System.out.println("You are now logged in.");
                 JOptionPane.showMessageDialog(null, "Welcome Agent " + p.getServiceNumber() +" \nYou are now logged in.",
                         "Welcome", JOptionPane.PLAIN_MESSAGE);
             } else{
@@ -48,14 +46,9 @@ public class Main {
 
                 blackList.add(p.getServiceNumber());
             }
-//              break;
-//          }
 
             check = true;
             while(check){
-//              System.out.println("Choose your next action:");
-//              System.out.println("(1)Log in    (2)Show all logged in members    (3)Show all blacklisted members    (4)EXIT");
-//              String action = scanner.nextLine();
                 String action = JOptionPane.showInputDialog(frame, """
                         Choose your next action:\s
                         (1)Log in   \s

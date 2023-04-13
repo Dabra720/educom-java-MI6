@@ -80,7 +80,6 @@ public class Main {
                     }
                     case "4" -> {
                         break mainloop;
-//                        System.exit(0);
                     }
                     default -> System.out.println("Not a valid option.");
                 }
@@ -89,7 +88,6 @@ public class Main {
 
         } while (true);
         System.out.println("EXITING THE PROGRAM!");
-        System.exit(0);
     }
 
     public static boolean validateNumber(String input){

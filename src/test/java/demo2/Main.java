@@ -1,9 +1,7 @@
-package nu.educom.MI6;
+package demo2;
 
-class Runner extends Thread{
-//    @Override
+class Runner implements Runnable {
     public void run() {
-//        super.run();
         System.out.println("Run");
         for(int i=0; i<10; i++){
             System.out.println("Hello " + i);
@@ -17,18 +15,11 @@ class Runner extends Thread{
     }
 }
 public class Main {
-    // Define different components
-
     public static void main(String[] args) {
-        Runner runner1 = new Runner();
-        runner1.start();
+        Thread t1 = new Thread(new Runner());
+        Thread t2 = new Thread(new Runner());
 
-
-
+        t1.start();
+        t2.start();
     }
-
-
-
-
 }
-

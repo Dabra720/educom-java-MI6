@@ -1,4 +1,4 @@
-package nu.educom.MI6;
+package opdracht1;
 
 public class Agent {
     private final String serviceNumber;

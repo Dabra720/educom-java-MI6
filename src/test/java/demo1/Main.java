@@ -1,7 +1,7 @@
-package nu.educom.MI6;
+package demo1;
 
 class Runner extends Thread{
-//    @Override
+    //    @Override
     public void run() {
 //        super.run();
         System.out.println("Run");

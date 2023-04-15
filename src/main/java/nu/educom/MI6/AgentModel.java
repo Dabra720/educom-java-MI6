@@ -16,7 +16,7 @@ public class AgentModel {
         return input.equals(secretPhrase);
 
     }
-    public boolean validateNumber(String input){
+    public boolean validNumber(String input){
         boolean valid = false;
         while(!valid){
             if(isNumeric(input)) {

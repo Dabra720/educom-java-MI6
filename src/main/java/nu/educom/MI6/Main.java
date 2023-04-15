@@ -1,30 +1,17 @@
 package nu.educom.MI6;
 
-class Runner extends Thread{
-//    @Override
-    public void run() {
-//        super.run();
-        System.out.println("Run");
-        for(int i=0; i<10; i++){
-            System.out.println("Hello " + i);
+import javax.swing.*;
 
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-}
 public class Main {
     // Define different components
+    JFrame frame = new JFrame();
 
     public static void main(String[] args) {
-        Runner runner1 = new Runner();
-        runner1.start();
-
-
-
+        IView view = new JPanelView();
+//        DatabaseRepository repo = new DatabaseRepository();
+        AgentModel model = new AgentModel();
+        Presentor presentor = new Presentor(view, model);
+        presentor.run();
     }
 
 

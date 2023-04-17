@@ -3,8 +3,6 @@ package nu.educom.MI6;
 import javax.swing.*;
 
 public class Main {
-    // Define different components
-    JFrame frame = new JFrame();
 
     public static void main(String[] args) {
         IView view = new JPanelView();

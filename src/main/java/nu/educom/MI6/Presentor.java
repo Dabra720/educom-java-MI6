@@ -21,11 +21,21 @@ class Presentor extends Thread implements IPresentor {
         }
     }
 
+    public AgentModel getModel(){
+        return model;
+    }
+
     public void handleLogin() {
+//        theView.showMessage("Welcome Agent");
+        String serviceNumber = theView.getServiceNumber();
+        String passPhrase = theView.getPassPhrase();
+
+        Agent agent = model.validateServiceNumber(serviceNumber);
+        model.validatePass(passPhrase);
 
     }
 
     public void handlePassword() {
-
+        String passPhrase = theView.getPassPhrase();
     }
 }

@@ -1,6 +1,8 @@
 package nu.educom.MI6;
 
-class OptionPaneView implements IView{
+import javax.swing.*;
+
+class OptionPaneView extends JFrame implements IView{
     private IPresentor presentor;
 
 

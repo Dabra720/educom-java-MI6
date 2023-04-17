@@ -7,68 +7,78 @@ public class AgentModel {
     private List<Agent> Agents = new ArrayList<>();
     private List<Integer> BlackList = new ArrayList<>();
     private String message;
-    private Agent agent;
 
+    public void printAgentsList(){
+        for (Agent agent:Agents) {
+            System.out.println("Agent: " + agent.getFormattedServiceNumber());
+        }
+    }
     public void setMessage(String msg){
         message = msg;
     }
     public String getMessage(){return message;}
     public Agent validateServiceNumber(String serviceNumber){
 
-        if(validNumber(serviceNumber)){
-            agent = new Agent(Integer.parseInt(serviceNumber));
-//            addAgentList(agent);
+        if(!BlackList.contains(Integer.parseInt(serviceNumber))){
+            Agent agent = new Agent(Integer.parseInt(serviceNumber));
+            Agents.add(agent);
             return agent;
         } else {
-            setMessage("Wrong number");
+//            setMessage("Wrong number");
             return null;
         }
     }
 
+
+    public Agent getAgent(){
+        return Agents.get(Agents.size()-1);
+    }
     public void addAgentList(Agent agent){
         Agents.add(agent);
     }
     public void addBlackList(int agent){
         BlackList.add(agent);
     }
-    public void validatePass(String input) {
-        String secretPhrase = "For ThE Royal QUEEN";
+
+    public boolean validatePass(String input, Agent agent) {
+//        String secretPhrase = "For ThE Royal QUEEN";
 //        return input.equals(secretPhrase);
 
-        agent = Agents.get(Agents.size());
+//        agent = Agents.get(Agents.size());
 
-        if(input.equals(secretPhrase)){
-            // Login geslaagd
-            // POP UP -> OptionPaneView?
-            setMessage("Welcome Agent - " + agent.getFormattedServiceNumber());
-        }else{
-            // Login gefaald
-            // Niet zeker of ik de int of de string nummer in deze lijst wil
-            addBlackList(agent.getServiceNumber());
-            setMessage("Blacklist Agent - " + agent.getFormattedServiceNumber());
-        }
-
+//        if(input.equals(agent.getPassPhrase())){
+//            // Login geslaagd
+//            // POP UP -> OptionPaneView?
+//            setMessage("Welcome Agent - " + agent.getFormattedServiceNumber());
+//        }else{
+//            // Login gefaald
+//            // Niet zeker of ik de int of de string nummer in deze lijst wil
+//            addBlackList(agent.getServiceNumber());
+//
+//            setMessage("Blacklist Agent - " + agent.getFormattedServiceNumber());
+//        }
+        return input.equals(agent.getPassPhrase());
     }
     public boolean validNumber(String input){
         boolean valid = false;
-        while(!valid){
+//        while(!valid){
             if(isNumeric(input)) {
                 if (input.length() > 3) {
                     System.out.println("Number cannot have more than 3 characters, try again.");
-                    break;
+//                    break;
                 }
                 int serviceNumber = Integer.parseInt(input);
                 if(serviceNumber < 1 || serviceNumber > 956){
                     System.out.println("That is not a valid number, try again.");
-                    break;
+//                    break;
                 } else{
                     valid = true;
                 }
             } else{
                 System.out.println("That is not a number, try again.");
-                break;
+//                break;
             }
-        }
+//        }
         return valid;
     }
 

@@ -31,6 +31,11 @@ class OptionPaneView extends JFrame implements IView{
         return null;
     }
 
+    @Override
+    public void close() {
+
+    }
+
     public void addPresentorListener(IPresentor p){
         this.presentor = p;
     }

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 class JPanelView extends JFrame implements IView, ActionListener{
     private JPanel mainWindow;
@@ -14,6 +15,9 @@ class JPanelView extends JFrame implements IView, ActionListener{
 
     private String serviceNumber;
     private String passPhrase;
+    Object myLockObj = new Object();
+    LinkedList<String> pendingActions = new LinkedList<>();
+    String actionToDo;
 
     public JPanelView(){
         mainWindow = new JPanel();
@@ -64,14 +68,6 @@ class JPanelView extends JFrame implements IView, ActionListener{
 
         submit.addActionListener(this);
 
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                serviceNumber = numberTxt.getText();
-//                passPhrase = passTxt.getText();
-//                presentor.handleLogin();
-//            }
-
-
         add(mainWindow);
         pack();
 
@@ -83,12 +79,31 @@ class JPanelView extends JFrame implements IView, ActionListener{
     @Override
     public void showMessage(String msg) {
 //        System.out.println(msg);
-        title.setText(msg);
+//        title.setText(msg);
+        if(SwingUtilities.isEventDispatchThread()){
+            title.setText(msg);
+        }else{
+            SwingUtilities.invokeLater(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        title.setText(msg);
+                    }
+                }
+            );
+        }
     }
 
-    @Override
-    public void triggerAskLogin() {
 
+    @Override
+    public void triggerAskLogin() throws InterruptedException {
+        synchronized (myLockObj){
+            while(pendingActions.isEmpty()){
+                myLockObj.wait();
+            }
+            actionToDo = pendingActions.removeFirst();
+        }
+        System.out.println("Starting doing action: " + actionToDo);
     }
 
     @Override
@@ -106,18 +121,28 @@ class JPanelView extends JFrame implements IView, ActionListener{
         return passPhrase;
     }
 
+    @Override
+    public void close() {
+        dispose();
+    }
+
     public void addPresentorListener(IPresentor p){
         this.presentor = p;
     }
 
     public void actionPerformed(ActionEvent e){
-        serviceNumber = numberTxt.getText();
-        passPhrase = passTxt.getText();
-        if(!serviceNumber.isEmpty() || !passPhrase.isEmpty()){
-            presentor.handleLogin();
-        } else{
-            showMessage("Please fill all fields");
+        synchronized (myLockObj) {
+            pendingActions.add(e.getActionCommand());
+//            System.out.println("Eventname: " + e.getActionCommand() + " + " + e.getWhen());
+//            System.out.println("actionPerformed thread name: " + Thread.currentThread().getName());
+            serviceNumber = numberTxt.getText();
+            passPhrase = passTxt.getText();
+            if (!serviceNumber.isEmpty() && !passPhrase.isEmpty()) {
+                presentor.handleLogin();
+            } else {
+                showMessage("Please fill all fields");
+            }
+            myLockObj.notify();
         }
-
     }
 }

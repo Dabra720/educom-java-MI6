@@ -26,6 +26,10 @@ class ConsoleView implements IView{
     }
 
     @Override
+    public void close() {
+    }
+
+    @Override
     public void addPresentorListener(IPresentor p) {
 
     }

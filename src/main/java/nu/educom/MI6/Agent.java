@@ -12,12 +12,13 @@ public class Agent {
         System.out.println("New agent created, servicenr: " + getFormattedServiceNumber());
     }
 
+    public String getPassPhrase(){
+        return passPhrase;
+    }
     public void setPassPhrase(String newPass){
         this.passPhrase = newPass;
     }
-    public boolean matchPassword(String input){
-        return this.passPhrase.equals(input);
-    }
+
     public void setLoggedIn(boolean bool){
         this.loggedIn = bool;
     }
@@ -32,15 +33,6 @@ public class Agent {
     public String getFormattedServiceNumber(){
         return String.format("%03d",serviceNumber);
     }
-//    public String convertNumber(String serviceNumber){
-//
-//        int serNum = Integer.parseInt(serviceNumber);
-//        if(serNum < 100 && serNum > 9){
-//            serviceNumber = "0" + serNum;
-//        }else if(serNum < 10){
-//            serviceNumber = "00" + serNum;
-//        }
-//        return serviceNumber;
-//    }
+
 
 }

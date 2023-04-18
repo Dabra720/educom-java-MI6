@@ -38,9 +38,9 @@ class Presentor extends Thread implements IPresentor {
         String serviceNumber = theView.getServiceNumber();
 
         if(!model.validNumber(serviceNumber)){
-//            JOptionPane.showMessageDialog(null, "ENEMY!",
-//                    "Error", JOptionPane.ERROR_MESSAGE);
-            theView.showMessage("Enemy");
+            JOptionPane.showMessageDialog(null, "ENEMY!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+//            theView.showMessage("Enemy");
         }else{
             Agent agent = model.validateServiceNumber(serviceNumber);
             if(agent!=null){

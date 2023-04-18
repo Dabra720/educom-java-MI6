@@ -4,19 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AgentModel {
+    private DatabaseRepository db;
     private List<Agent> Agents = new ArrayList<>();
     private List<Integer> BlackList = new ArrayList<>();
     private String message;
+
+    public AgentModel(DatabaseRepository repo){
+        this.db = repo;
+    }
 
     public void printAgentsList(){
         for (Agent agent:Agents) {
             System.out.println("Agent: " + agent.getFormattedServiceNumber());
         }
     }
-    public void setMessage(String msg){
-        message = msg;
-    }
-    public String getMessage(){return message;}
+
     public Agent validateServiceNumber(String serviceNumber){
 
         if(!BlackList.contains(Integer.parseInt(serviceNumber))){
@@ -24,7 +26,6 @@ public class AgentModel {
             Agents.add(agent);
             return agent;
         } else {
-//            setMessage("Wrong number");
             return null;
         }
     }

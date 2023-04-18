@@ -1,18 +1,28 @@
 package nu.educom.MI6;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class LoginAttempt {
     private int id;
     private int agent_id;
-    private Date loginDateTime;
+    private LocalDateTime loginDateTime;
     private boolean succesful;
 
     public LoginAttempt(int serviceNumber){
         agent_id = serviceNumber;
-        loginDateTime = new Date();
     }
 
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public void setLoginDateTime(LocalDateTime logDate){
+        this.loginDateTime = logDate;
+    }
+
+    public void setSuccesful(boolean succes){
+        succesful = succes;
+    }
 
 
 

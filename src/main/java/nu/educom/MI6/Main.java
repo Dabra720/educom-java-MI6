@@ -13,6 +13,16 @@ public class Main {
         Presentor presentor = new Presentor(view, model);
         presentor.run();
 
+//        // create a new connection from MySQLJDBCUtil
+//        try (Connection conn = MySQLJDBCUtil.getConnection()) {
+//
+//            // print out a message
+//            System.out.println(String.format("Connected to database %s "
+//                    + "successfully.", conn.getCatalog()));
+//        } catch (SQLException ex) {
+//            System.out.println(ex.getMessage());
+//        }
+
     }
 
 

@@ -17,7 +17,7 @@ class JPanelView extends JFrame implements IView, ActionListener{
     private String passPhrase;
     Object myLockObj = new Object();
     LinkedList<String> pendingActions = new LinkedList<>();
-    String actionToDo;
+    boolean ready;
 
     public JPanelView(){
         mainWindow = new JPanel();
@@ -87,7 +87,8 @@ class JPanelView extends JFrame implements IView, ActionListener{
                 new Runnable() {
                     @Override
                     public void run() {
-                        title.setText(msg);
+//                        title.setText(msg);
+                        JOptionPane.showMessageDialog(getContentPane(), msg);
                     }
                 }
             );
@@ -98,12 +99,22 @@ class JPanelView extends JFrame implements IView, ActionListener{
     @Override
     public void triggerAskLogin() throws InterruptedException {
         synchronized (myLockObj){
-            while(pendingActions.isEmpty()){
+            ready = false;
+            System.out.println("Gonna wait");
+            while(!ready){
+                ready = false;
                 myLockObj.wait();
             }
-            actionToDo = pendingActions.removeFirst();
+            System.out.println("Starting doing action: handleLogin()");
+
+            presentor.handleLogin();
+//            actionToDo = pendingActions.removeFirst();
+
+
         }
-        System.out.println("Starting doing action: " + actionToDo);
+//        System.out.println("Starting doing action: " + actionToDo);
+////        showMessage("Enter your number and password.");
+
     }
 
     @Override
@@ -113,7 +124,7 @@ class JPanelView extends JFrame implements IView, ActionListener{
 
     @Override
     public void triggerAskPassword() {
-
+        title.setText("Please enter a password");
     }
 
     @Override
@@ -132,17 +143,20 @@ class JPanelView extends JFrame implements IView, ActionListener{
 
     public void actionPerformed(ActionEvent e){
         synchronized (myLockObj) {
-            pendingActions.add(e.getActionCommand());
-//            System.out.println("Eventname: " + e.getActionCommand() + " + " + e.getWhen());
-//            System.out.println("actionPerformed thread name: " + Thread.currentThread().getName());
             serviceNumber = numberTxt.getText();
             passPhrase = passTxt.getText();
-            if (!serviceNumber.isEmpty() && !passPhrase.isEmpty()) {
-                presentor.handleLogin();
-            } else {
-                showMessage("Please fill all fields");
+            if (serviceNumber.isEmpty()) {
+                title.setText("Please fill all fields");
+            } else if(passPhrase.isEmpty()) {
+                title.setText("Please enter a password");
+            }else{
+                title.setText("");
+                System.out.println("Ready op TRUE");
+                ready = true;
+                myLockObj.notifyAll();
+
             }
-            myLockObj.notify();
+
         }
     }
 }

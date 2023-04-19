@@ -18,7 +18,11 @@ public class MySQLJDBCUtil {
     public static Connection getConnection() throws SQLException {
         Connection conn = null;
 
-        try (FileInputStream f = new FileInputStream("C:\\Users\\daan_\\IdeaProjects\\educom-java-MI6\\src\\main\\java\\nu\\educom\\MI6\\db.properties")) {
+        // filepath verschilt tussen mijn apparaten.
+        String filePath = "D:\\Users\\Daan\\IntelliJ\\educom-java-MI6\\src\\main\\java\\nu\\educom\\MI6\\db.properties";
+//        String filePath = "C:\\Users\\daan_\\IdeaProjects\\educom-java-MI6\\src\\main\\java\\nu\\educom\\MI6\\db.properties";
+
+        try (FileInputStream f = new FileInputStream(filePath)) {
 
             // load the properties file
             Properties pros = new Properties();

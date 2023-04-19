@@ -12,19 +12,6 @@ class Presentor extends Thread implements IPresentor {
         view.addPresentorListener(this);
         this.model = model;
     }
-
-    public void run(){
-        while(running){
-//            System.out.println("run() thread name: " + Thread.currentThread().getName());
-            try {
-                theView.triggerAskLogin();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        theView.close();
-    }
-
     public AgentModel getModel(){
         return model;
     }
@@ -32,36 +19,51 @@ class Presentor extends Thread implements IPresentor {
         return theView;
     }
 
+    public void run(){
+        while(running){
+//            System.out.println("run() thread name: " + Thread.currentThread().getName());
+            try {
+                theView.triggerAskLogin();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("After asklogin Loop");
+        }
+        theView.close();
+    }
+
     public void handleLogin() {
-//        theView.showMessage("Welcome Agent");
-//        System.out.println("handleLogin thread name: " + Thread.currentThread().getName());
         String serviceNumber = theView.getServiceNumber();
+//        model.printAgent(Integer.parseInt(serviceNumber));
 
         if(!model.validNumber(serviceNumber)){
-            JOptionPane.showMessageDialog(null, "ENEMY!",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-//            theView.showMessage("Enemy");
+            theView.showMessage("Enemy");
         }else{
             Agent agent = model.validateServiceNumber(serviceNumber);
-            if(agent!=null){
-                handlePassword();
-            }else{
+            if(agent==null){
                 theView.showMessage("ACCESS DENIED");
+            }else{
+//                System.out.println("Seconds since last login:" + model.authenticateAgent());
+//                if(model.authenticateAgent()>60) { //Check for timout
+                    // In deze IF gaat nog iets fout
+                    handlePassword();
+//                }else{
+//                    theView.showMessage("YOU ARE TIMED OUT!");
+//                }
             }
-
         }
-
-
     }
 
     public void handlePassword() {
         String passPhrase = theView.getPassPhrase();
-        model.printAgentsList();
-        if(!model.validatePass(passPhrase, model.getAgent())){
-            model.addBlackList(model.getAgent().getServiceNumber());
-            theView.showMessage("You have been blacklisted");
+//        model.printAgentsList();
+        if(!model.validatePass(passPhrase, model.getCurrentAgent())){
+            model.addBlackList(model.getCurrentAgent().getServiceNumber());
+            theView.showMessage("TIME OUT");
+            model.storeLoginAttempt(new LoginAttempt(model.getCurrentAgent().getServiceNumber(), false));
         }else{
-            theView.showMessage("Welcome agent " + model.getAgent().getFormattedServiceNumber());
+            model.storeLoginAttempt(new LoginAttempt(model.getCurrentAgent().getServiceNumber(), false));
+            theView.showMessage("Welcome agent " + model.getCurrentAgent().getFormattedServiceNumber());
         }
     }
 }

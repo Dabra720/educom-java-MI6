@@ -11,19 +11,33 @@ public class LoginAttempt {
     public LoginAttempt(int serviceNumber){
         agent_id = serviceNumber;
     }
+    public LoginAttempt(int serviceNr, boolean success){
+        agent_id=serviceNr;
+        succesful=success;
+    }
 
     public void setId(int id){
         this.id = id;
     }
-
+    public int getId(){
+        return id;
+    }
+    public int getServiceNumber(){
+        return agent_id;
+    }
     public void setLoginDateTime(LocalDateTime logDate){
         this.loginDateTime = logDate;
+    }
+    public LocalDateTime getLoginDateTime(){
+        return loginDateTime;
     }
 
     public void setSuccesful(boolean succes){
         succesful = succes;
     }
-
+    public boolean getSuccess(){
+        return succesful;
+    }
 
 
 }

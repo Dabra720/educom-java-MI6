@@ -3,8 +3,9 @@ package nu.educom.MI6;
 import java.awt.*;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
-
+import java.util.List;
 
 public class DatabaseRepository {
     protected Connection conn;
@@ -57,15 +58,15 @@ public class DatabaseRepository {
         return agent;
     }
 
-    public LinkedList<LoginAttempt> readAllFailedLoginAttempts(Agent agent){
-        LinkedList<LoginAttempt> loginAttempts = new LinkedList<>();
+    public List readAllFailedLoginAttempts(Agent agent){
+        List<LoginAttempt> loginAttempts = new ArrayList<>();
         String sql = "SELECT * FROM login_attempts WHERE service_nr=? AND success=0";
         int serviceNr = agent.getServiceNumber();
         try (Connection conn = MySQLJDBCUtil.getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             System.out.println("ServiceNr: " + serviceNr);
             pstmt.setInt(1, serviceNr);
-            ResultSet rs = pstmt.executeQuery(sql);
+            ResultSet rs = pstmt.executeQuery();
 
             while(rs.next()){
 
@@ -73,7 +74,7 @@ public class DatabaseRepository {
                 login.setId(rs.getInt("id"));
                 login.setLoginDateTime(rs.getObject("timestamp", LocalDateTime.class));
                 loginAttempts.add(login);
-                System.out.println("Print login attempts: " + login.getLoginDateTime().getSecond());
+//                System.out.println("Print login attempts: " + login.getLoginDateTime().getLong());
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());

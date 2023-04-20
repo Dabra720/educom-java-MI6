@@ -19,8 +19,8 @@ public class MySQLJDBCUtil {
         Connection conn = null;
 
         // filepath verschilt tussen mijn apparaten.
-        String filePath = "D:\\Users\\Daan\\IntelliJ\\educom-java-MI6\\src\\main\\java\\nu\\educom\\MI6\\db.properties";
-//        String filePath = "C:\\Users\\daan_\\IdeaProjects\\educom-java-MI6\\src\\main\\java\\nu\\educom\\MI6\\db.properties";
+//        String filePath = "D:\\Users\\Daan\\IntelliJ\\educom-java-MI6\\src\\main\\java\\nu\\educom\\MI6\\db.properties";
+        String filePath = "C:\\Users\\daan_\\IdeaProjects\\educom-java-MI6\\src\\main\\java\\nu\\educom\\MI6\\db.properties";
 
         try (FileInputStream f = new FileInputStream(filePath)) {
 

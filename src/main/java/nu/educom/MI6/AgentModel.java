@@ -28,10 +28,24 @@ public class AgentModel {
         System.out.println("Service-nr: " + agent.isActive());
     }
 
+    public Double getTimeOut(){
+//        Math.pow() // Machtsberekening
+        double failedLoginAttempts = currentAgent.getLoginAttemptList().size();
+        double defaultTimeOut = 60; // Seconden
+
+        return defaultTimeOut * Math.pow(2, failedLoginAttempts);
+    }
+
     public int authenticateAgent(){
         LoginAttempt lastLogin = getLastLoginAttempt();
-
-        return LocalDateTime.now().getSecond()  - lastLogin.getLoginDateTime().getSecond();
+        long timeOut = getTimeOut().longValue();
+        LocalDateTime dateAfterTimeOut;
+        try {
+            dateAfterTimeOut = lastLogin.getLoginDateTime().plusSeconds(timeOut);
+        }catch(Exception e){
+            dateAfterTimeOut = LocalDateTime.now();
+        }
+        return LocalDateTime.now().getSecond()  - dateAfterTimeOut.getSecond();
     }
     public void storeLoginAttempt(LoginAttempt login){
         repo.insertLoginAttempt(login);
@@ -39,8 +53,13 @@ public class AgentModel {
 
     public LoginAttempt getLastLoginAttempt(){
         LoginAttempt login;
-        LinkedList<LoginAttempt> loginAttempts = repo.readAllFailedLoginAttempts(currentAgent);
-        login = loginAttempts.getLast();
+        List<LoginAttempt> loginAttempts = repo.readAllFailedLoginAttempts(currentAgent);
+//        login = loginAttempts.getLast();
+        try{
+            login = loginAttempts.get(loginAttempts.size() -1);
+        }catch(Exception e){
+            return null;
+        }
 
         return login;
     }
@@ -48,7 +67,7 @@ public class AgentModel {
     public Agent validateServiceNumber(String serviceNr){
         Agent agent = null;
         int agent_id = Integer.parseInt(serviceNr);
-        if(!BlackList.contains(agent_id)){
+//        if(!BlackList.contains(agent_id)){
             try{
                 agent = getAgent(agent_id);
                 System.out.println("Agent is added to the list: " + agent.getFormattedServiceNumber());
@@ -56,9 +75,9 @@ public class AgentModel {
             }catch(Exception e){
                 System.out.println("Not an existing number.");
             }
-        }else{
-            System.out.println("This agent is blacklisted");
-        }
+//        }else{
+//            System.out.println("This agent is blacklisted");
+//        }
         return agent;
     }
 
@@ -68,6 +87,7 @@ public class AgentModel {
         currentAgent = repo.readAgentByServiceNumber(serviceNr);
         if(currentAgent!=null){
             System.out.println("Current Agent is now: " + currentAgent.getFormattedServiceNumber());
+            currentAgent.setLoginAttempts(repo.readAllFailedLoginAttempts(currentAgent));
         }else {
             System.out.println("No CURRENT AGENT available");
         }

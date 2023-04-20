@@ -1,7 +1,10 @@
 package nu.educom.MI6;
 
+//import java.awt.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Agent {
     private int id;
@@ -9,7 +12,7 @@ public class Agent {
     private String passPhrase = "For ThE Royal QUEEN";
     private boolean active;
     private LocalDate license_to_kill_date;
-//    private List<LoginAttempt> loginAttemptList;
+    private List loginAttemptList;
 
     public Agent(int serviceNumber){
         this.serviceNumber = serviceNumber;
@@ -46,5 +49,11 @@ public class Agent {
         return String.format("%03d",serviceNumber);
     }
 
+    public List getLoginAttemptList(){
+        return loginAttemptList;
+    }
+    public void setLoginAttempts(List loginAttempts){
+        loginAttemptList = loginAttempts;
+    }
 
 }

@@ -43,9 +43,8 @@ class Presentor extends Thread implements IPresentor {
             if(agent==null){
                 theView.showMessage("ACCESS DENIED");
             }else{
-//                System.out.println("Seconds since last login:" + model.authenticateAgent());
-                if(model.authenticateAgent()>=0) { //Check for timout
-                    // In deze IF gaat nog iets fout
+                System.out.println("Seconds since last login:" + model.authenticateAgent());
+                if(model.authenticateAgent()<=0) { //Check for timout
                     handlePassword();
                 }else{
                     theView.showMessage("YOU ARE TIMED OUT! \nSeconds left: " + model.authenticateAgent());
@@ -53,11 +52,16 @@ class Presentor extends Thread implements IPresentor {
             }
         }
     }
+    public void test(){
+        System.out.println("Authenticate agent:");
+        Agent agent = model.getAgent(2);
+        System.out.println("Tijdverschil: " + model.authenticateAgent());
+    }
 
     public void handlePassword() {
         String passPhrase = theView.getPassPhrase();
 //        model.printAgentsList();
-        if(!model.validatePass(passPhrase, model.getCurrentAgent())){
+        if(!model.validatePass(passPhrase, model.getCurrentAgent())||model.isActive()){
 //            model.addBlackList(model.getCurrentAgent().getServiceNumber());
             theView.showMessage("TIME OUT");
             model.storeLoginAttempt(new LoginAttempt(model.getCurrentAgent().getServiceNumber(), false));

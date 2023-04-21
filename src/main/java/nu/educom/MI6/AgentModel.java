@@ -1,6 +1,7 @@
 package nu.educom.MI6;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class AgentModel {
         return defaultTimeOut * Math.pow(2, failedLoginAttempts);
     }
 
-    public int authenticateAgent(){
+    public long authenticateAgent(){
         LoginAttempt lastLogin = getLastLoginAttempt();
         long timeOut = getTimeOut().longValue();
         LocalDateTime dateAfterTimeOut;
@@ -45,7 +46,11 @@ public class AgentModel {
         }catch(Exception e){
             dateAfterTimeOut = LocalDateTime.now();
         }
-        return LocalDateTime.now().getSecond()  - dateAfterTimeOut.getSecond();
+        long diff = LocalDateTime.now().until(dateAfterTimeOut, ChronoUnit.SECONDS);
+        System.out.println("Nu: " + LocalDateTime.now());
+        System.out.println("Timeout:  " + dateAfterTimeOut);
+        System.out.println("Verschil tussen nu en timout: " + diff);
+        return diff;
     }
     public void storeLoginAttempt(LoginAttempt login){
         repo.insertLoginAttempt(login);
@@ -98,14 +103,17 @@ public class AgentModel {
 //        System.out.println("Returning Current agent: " + currentAgent.getFormattedServiceNumber());
         return currentAgent;
     }
-    public void addAgentList(Agent agent){
-        Agents.add(agent);
-    }
-    public void addBlackList(int agent){
-        System.out.println("Added to blacklist-Agent: " + agent);
-        BlackList.add(agent);
-    }
+//    public void addAgentList(Agent agent){
+//        Agents.add(agent);
+//    }
+//    public void addBlackList(int agent){
+//        System.out.println("Added to blacklist-Agent: " + agent);
+//        BlackList.add(agent);
+//    }
 
+    public boolean isActive(){
+        return currentAgent.isActive();
+    }
     public boolean validatePass(String input, Agent agent) {
         System.out.println("Validating pass:");
         System.out.println("input: " + input);

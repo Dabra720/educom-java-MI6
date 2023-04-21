@@ -3,6 +3,7 @@ package nu.educom.MI6;
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class Main {
 
@@ -12,6 +13,7 @@ public class Main {
         AgentModel model = new AgentModel(repo);
         Presentor presentor = new Presentor(view, model);
         presentor.run();
+//        presentor.test();
 
 //        // create a new connection from MySQLJDBCUtil
 //        try (Connection conn = MySQLJDBCUtil.getConnection()) {
@@ -22,6 +24,7 @@ public class Main {
 //        } catch (SQLException ex) {
 //            System.out.println(ex.getMessage());
 //        }
+
 
     }
 

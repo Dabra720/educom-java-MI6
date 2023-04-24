@@ -1,5 +1,7 @@
 package nu.educom.MI6;
 
+import org.hibernate.Session;
+
 import java.awt.*;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -32,6 +34,29 @@ public class DatabaseRepository {
         }
 
     }
+
+    public List<Agent> readAllAgents(){
+        Session session = HibernateUtil.openSession();
+        session.beginTransaction();
+        List<Agent> allAgents = session.createQuery("select * from agents", Agent.class)
+                .getResultList();
+        for (Agent agent:allAgents ) {
+            System.out.println("Service-nr: " + agent.getFormattedServiceNumber());
+            System.out.println("Service-nr: " + agent.getPassPhrase());
+            System.out.println("Service-nr: " + agent.getActive());
+        }
+        session.getTransaction().commit();
+        session.close();
+        return allAgents;
+    }
+    public Agent readHibernate(int serviceNr){
+        Session session = HibernateUtil.openSession();
+
+        Agent agent = session.createQuery("from Agent WHERE serviceNumber = :serviceNr", Agent.class)
+                .setParameter("serviceNr", serviceNr)
+                .uniqueResult();
+        return agent;
+    }
     public Agent readAgentByServiceNumber(int serviceNr){
         String sql = "SELECT * FROM agents WHERE service_nr=?";
         Agent agent = null;
@@ -48,7 +73,7 @@ public class DatabaseRepository {
                 agent.setId(rs.getInt("id"));
                 agent.setPassPhrase(rs.getString("pass_phrase"));
                 if(rs.getDate("license_to_kill_date")!= null) {
-                    agent.setLicenseToKill(rs.getDate("license_to_kill_date").toLocalDate());
+//                    agent.setLicenseToKill(rs.getDate("license_to_kill_date").toLocalDate());
                 }
                 agent.setActive(rs.getBoolean("active"));
             }

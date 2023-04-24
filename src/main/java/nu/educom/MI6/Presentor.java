@@ -31,7 +31,7 @@ class Presentor extends Thread implements IPresentor {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println("After asklogin Loop");
+//            System.out.println("After asklogin Loop");
         }
         theView.close();
     }
@@ -46,7 +46,7 @@ class Presentor extends Thread implements IPresentor {
             if(agent==null){
                 theView.showMessage("ACCESS DENIED");
             }else{
-                System.out.println("Seconds since last login:" + model.authenticateAgent());
+//                System.out.println("Seconds since last login:" + model.authenticateAgent());
                 if(model.authenticateAgent()<=0) { //Check for timout
                     handlePassword();
                 }else{
@@ -57,9 +57,10 @@ class Presentor extends Thread implements IPresentor {
         }
     }
     public void test(){
-        System.out.println("Authenticate agent:");
-        Agent agent = model.getAgent(2);
-        System.out.println("Tijdverschil: " + model.authenticateAgent());
+//        System.out.println("Authenticate agent:");
+//        Agent agent = model.getAgent(2);
+//        System.out.println("Tijdverschil: " + model.authenticateAgent());
+        model.printAgentsList();
     }
 
     public void handlePassword() {
@@ -67,12 +68,18 @@ class Presentor extends Thread implements IPresentor {
 //        model.printAgentsList();
         if(!model.validatePass(passPhrase, model.getCurrentAgent())||!model.isActive()){
 //            model.addBlackList(model.getCurrentAgent().getServiceNumber());
-            theView.showMessage("WRONG PASSWORD, TIMEOUT SET");
+            theView.showMessage("WRONG PASSWORD OR INACTIVE ACCOUNT \nTIMEOUT SET");
             model.storeLoginAttempt(new LoginAttempt(model.getCurrentAgent().getServiceNumber(), false));
         }else{
             model.printLoginAttempts();
             model.storeLoginAttempt(new LoginAttempt(model.getCurrentAgent().getServiceNumber(), true));
-            theView.showMessage("Welcome agent " + model.getCurrentAgent().getFormattedServiceNumber());
+            String message = "Welcome agent " + model.getCurrentAgent().getFormattedServiceNumber();
+            if(model.getCurrentAgent().getLicense_to_kill()!=null){
+                message += ("\nYour license to kill expires: " + model.getCurrentAgent().getLicense_to_kill());
+            } else{
+                message += "\nYou do not have a license to kill";
+            }
+            theView.showMessage(message);
 
         }
     }

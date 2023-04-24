@@ -9,7 +9,6 @@ import java.util.List;
 public class AgentModel {
     private DatabaseRepository repo;
     private List<Agent> Agents = new ArrayList<>();
-    private List<Integer> BlackList = new ArrayList<>();
     private Agent currentAgent;
 
     public AgentModel(DatabaseRepository repo){
@@ -17,8 +16,12 @@ public class AgentModel {
     }
 
     public void printAgentsList(){
-        for (Agent agent:Agents) {
-            System.out.println("Agent: " + agent.getFormattedServiceNumber());
+        Agents = repo.readAllAgents();
+
+        for (Agent agent:Agents ) {
+            System.out.println("Service-nr: " + agent.getFormattedServiceNumber());
+            System.out.println("Service-nr: " + agent.getPassPhrase());
+            System.out.println("Service-nr: " + agent.getActive());
         }
     }
     public void printAgent(int serviceNr){
@@ -26,7 +29,7 @@ public class AgentModel {
         Agent agent = getAgent(serviceNr);
         System.out.println("Service-nr: " + agent.getFormattedServiceNumber());
         System.out.println("Service-nr: " + agent.getPassPhrase());
-        System.out.println("Service-nr: " + agent.isActive());
+        System.out.println("Service-nr: " + agent.getActive());
     }
 
     public void printLoginAttempts(){
@@ -54,9 +57,9 @@ public class AgentModel {
             dateAfterTimeOut = LocalDateTime.now();
         }
         long diff = LocalDateTime.now().until(dateAfterTimeOut, ChronoUnit.SECONDS);
-        System.out.println("Nu: " + LocalDateTime.now());
-        System.out.println("Timeout:  " + dateAfterTimeOut);
-        System.out.println("Verschil tussen nu en timout: " + diff);
+//        System.out.println("Nu: " + LocalDateTime.now());
+//        System.out.println("Timeout:  " + dateAfterTimeOut);
+//        System.out.println("Verschil tussen nu en timout: " + diff);
         return diff;
     }
     public void storeLoginAttempt(LoginAttempt login){
@@ -80,7 +83,7 @@ public class AgentModel {
         int agent_id = Integer.parseInt(serviceNr);
             try{
                 agent = getAgent(agent_id);
-                System.out.println("Agent is added to the list: " + agent.getFormattedServiceNumber());
+//                System.out.println("Agent is added to the list: " + agent.getFormattedServiceNumber());
                 Agents.add(agent);
             }catch(Exception e){
                 System.out.printf("Error: " + e.getMessage());
@@ -110,7 +113,7 @@ public class AgentModel {
     }
 
     public boolean isActive(){
-        return currentAgent.isActive();
+        return currentAgent.getActive();
     }
     public boolean validatePass(String input, Agent agent) {
         System.out.println("Validating pass:");

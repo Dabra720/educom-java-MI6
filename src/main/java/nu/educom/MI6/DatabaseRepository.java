@@ -47,7 +47,9 @@ public class DatabaseRepository {
                 agent = new Agent(rs.getInt("service_nr"));
                 agent.setId(rs.getInt("id"));
                 agent.setPassPhrase(rs.getString("pass_phrase"));
-                agent.setLicenseToKill(rs.getDate("license_to_kill_date").toLocalDate());
+                if(rs.getDate("license_to_kill_date")!= null) {
+                    agent.setLicenseToKill(rs.getDate("license_to_kill_date").toLocalDate());
+                }
                 agent.setActive(rs.getBoolean("active"));
             }
 
@@ -58,17 +60,28 @@ public class DatabaseRepository {
         return agent;
     }
 
-    public List readAllFailedLoginAttempts(Agent agent){
-        List<LoginAttempt> loginAttempts = new ArrayList<>();
-        String sql = "SELECT * FROM login_attempts WHERE service_nr=? AND success=0";
+    public ArrayList readFailedLoginAttempts(Agent agent) {
+        ArrayList<LoginAttempt> loginAttempts = new ArrayList<>();
+        String sql = "select l.id, l.service_nr, l.timestamp, l.success from login_attempts l\n" +
+                "left join (\n" +
+                "select service_nr, timestamp as last_success \n" +
+                "from login_attempts \n" +
+                "where success=1 AND service_nr=?\n" +
+                "order by id desc\n" +
+                "limit 1\n" +
+                ") max on max.service_nr=l.service_nr\n" +
+                "where timediff(l.timestamp, max.last_success) > 0 AND l.service_nr=?;";
+
+
         int serviceNr = agent.getServiceNumber();
         try (Connection conn = MySQLJDBCUtil.getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             System.out.println("ServiceNr: " + serviceNr);
             pstmt.setInt(1, serviceNr);
+            pstmt.setInt(2, serviceNr);
             ResultSet rs = pstmt.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
 
                 LoginAttempt login = new LoginAttempt(serviceNr);
                 login.setId(rs.getInt("id"));
@@ -81,8 +94,7 @@ public class DatabaseRepository {
         }
 
         return loginAttempts;
+
+
     }
-
-
-
 }

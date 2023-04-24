@@ -1,6 +1,10 @@
 package nu.educom.MI6;
 
 import javax.swing.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 class Presentor extends Thread implements IPresentor {
     IView theView;
@@ -34,7 +38,6 @@ class Presentor extends Thread implements IPresentor {
 
     public void handleLogin() {
         String serviceNumber = theView.getServiceNumber();
-//        model.printAgent(Integer.parseInt(serviceNumber));
 
         if(!model.validNumber(serviceNumber)){
             theView.showMessage("Enemy");
@@ -47,7 +50,8 @@ class Presentor extends Thread implements IPresentor {
                 if(model.authenticateAgent()<=0) { //Check for timout
                     handlePassword();
                 }else{
-                    theView.showMessage("YOU ARE TIMED OUT! \nSeconds left: " + model.authenticateAgent());
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    theView.showMessage("YOU ARE TIMED OUT! \nYou can try again at: " + LocalDateTime.now().plusSeconds(model.authenticateAgent()).format(formatter));
                 }
             }
         }
@@ -61,13 +65,15 @@ class Presentor extends Thread implements IPresentor {
     public void handlePassword() {
         String passPhrase = theView.getPassPhrase();
 //        model.printAgentsList();
-        if(!model.validatePass(passPhrase, model.getCurrentAgent())||model.isActive()){
+        if(!model.validatePass(passPhrase, model.getCurrentAgent())||!model.isActive()){
 //            model.addBlackList(model.getCurrentAgent().getServiceNumber());
-            theView.showMessage("TIME OUT");
+            theView.showMessage("WRONG PASSWORD, TIMEOUT SET");
             model.storeLoginAttempt(new LoginAttempt(model.getCurrentAgent().getServiceNumber(), false));
         }else{
-            model.storeLoginAttempt(new LoginAttempt(model.getCurrentAgent().getServiceNumber(), false));
+            model.printLoginAttempts();
+            model.storeLoginAttempt(new LoginAttempt(model.getCurrentAgent().getServiceNumber(), true));
             theView.showMessage("Welcome agent " + model.getCurrentAgent().getFormattedServiceNumber());
+
         }
     }
 }

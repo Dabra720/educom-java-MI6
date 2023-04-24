@@ -4,6 +4,8 @@ package nu.educom.MI6;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Agent {
@@ -11,8 +13,8 @@ public class Agent {
     private final int serviceNumber;
     private String passPhrase = "For ThE Royal QUEEN";
     private boolean active;
-    private LocalDate license_to_kill_date;
-    private List loginAttemptList;
+    private LocalDate license_to_kill_date = null;
+    private ArrayList loginAttemptList;
 
     public Agent(int serviceNumber){
         this.serviceNumber = serviceNumber;
@@ -38,7 +40,7 @@ public class Agent {
     }
 
     public void setLicenseToKill(LocalDate date){
-        license_to_kill_date = date;
+            license_to_kill_date = date;
     }
 
     public int getServiceNumber(){
@@ -49,10 +51,10 @@ public class Agent {
         return String.format("%03d",serviceNumber);
     }
 
-    public List getLoginAttemptList(){
+    public ArrayList getLoginAttemptList(){
         return loginAttemptList;
     }
-    public void setLoginAttempts(List loginAttempts){
+    public void setLoginAttempts(ArrayList loginAttempts){
         loginAttemptList = loginAttempts;
     }
 

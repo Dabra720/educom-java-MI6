@@ -2,32 +2,40 @@ package nu.educom.MI6;
 
 //import java.awt.*;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table( name="agents")
+@Table(name="agents")
 public class Agent {
+    @Id
+    @GeneratedValue(generator = "increment")
+    @GenericGenerator(name = "increment", strategy = "increment")
     private int id;
-    private final int service_number;
-    private String pass_phrase = "For ThE Royal QUEEN";
+    @Column(name="service_nr")
+    private int serviceNumber;
+    @Column(name="pass_phrase")
+        private String passPhrase = "For ThE Royal QUEEN";
+    @Column(name="active")
     private boolean active;
-
+    @Temporal(TemporalType.DATE)
+    @Column(name="license_to_kill_date")
     private Date license_to_kill_date = null;
-    private ArrayList loginAttemptList;
-    private String formattedServiceNumber;
+//    private ArrayList loginAttemptList;
 
     public Agent(int serviceNumber){
-        this.service_number = serviceNumber;
+        this.serviceNumber = serviceNumber;
 //        this.serviceNumber = convertNumber(serviceNumber);
 //        System.out.println("New agent created, servicenr: " + getFormattedServiceNumber());
     }
 
-    @Id
+    public Agent(){
+
+    }
+
     public int getId() {
         return id;
     }
@@ -35,47 +43,45 @@ public class Agent {
         this.id = id;
     }
 
-    @Column(name="pass_phrase")
+
     public String getPassPhrase(){
-        return pass_phrase;
+        return passPhrase;
     }
     public void setPassPhrase(String newPass){
-        this.pass_phrase = newPass;
+        this.passPhrase = newPass;
     }
 
     public void setActive(boolean bool){
         this.active = bool;
     }
-    @Column(name="active")
+
     public boolean getActive(){
         return this.active;
     }
 
+
     public void setLicenseToKill(Date date){
             license_to_kill_date = date;
     }
-    @Temporal(TemporalType.DATE)
-    @Column(name="license_to_kill_date")
+
     public Date getLicense_to_kill(){
         return license_to_kill_date;
     }
 
     public int getServiceNumber(){
-        return this.service_number;
+        return this.serviceNumber;
     }
 
-    public void setFormattedServiceNumber(){
-        formattedServiceNumber = String.format("%03d",service_number);
-    }
-    public String getFormattedServiceNumber(){
-        return String.format("%03d",service_number);
-    }
+//    public String getFormattedServiceNumber(){
+//        return String.format("%03d",service_number);
+//    }
 
     public ArrayList getLoginAttemptList(){
+        ArrayList <LoginAttempt> loginAttemptList = new ArrayList<LoginAttempt>();
         return loginAttemptList;
     }
-    public void setLoginAttempts(ArrayList loginAttempts){
-        loginAttemptList = loginAttempts;
-    }
+//    public void setLoginAttempts(ArrayList loginAttempts){
+//        loginAttemptList = loginAttempts;
+//    }
 
 }

@@ -19,7 +19,7 @@ public class AgentModel {
         Agents = repo.readAllAgents();
 
         for (Agent agent:Agents ) {
-            System.out.println("Service-nr: " + agent.getFormattedServiceNumber());
+//            System.out.println("Service-nr: " + agent.getFormattedServiceNumber());
             System.out.println("Service-nr: " + agent.getPassPhrase());
             System.out.println("Service-nr: " + agent.getActive());
         }
@@ -27,7 +27,7 @@ public class AgentModel {
     public void printAgent(int serviceNr){
         System.out.println("Print agent: " + serviceNr);
         Agent agent = getAgent(serviceNr);
-        System.out.println("Service-nr: " + agent.getFormattedServiceNumber());
+//        System.out.println("Service-nr: " + agent.getFormattedServiceNumber());
         System.out.println("Service-nr: " + agent.getPassPhrase());
         System.out.println("Service-nr: " + agent.getActive());
     }
@@ -83,7 +83,6 @@ public class AgentModel {
         int agent_id = Integer.parseInt(serviceNr);
             try{
                 agent = getAgent(agent_id);
-//                System.out.println("Agent is added to the list: " + agent.getFormattedServiceNumber());
                 Agents.add(agent);
             }catch(Exception e){
                 System.out.printf("Error: " + e.getMessage());
@@ -97,9 +96,9 @@ public class AgentModel {
 
         currentAgent = repo.readAgentByServiceNumber(serviceNr);
         if(currentAgent!=null){
-            System.out.println("Current Agent is now: " + currentAgent.getFormattedServiceNumber());
+            System.out.println("Current Agent is now: " + getFormattedServiceNumber());
             try{
-                currentAgent.setLoginAttempts(repo.readFailedLoginAttempts(currentAgent));
+//                currentAgent.setLoginAttempts(repo.readFailedLoginAttempts(currentAgent));
             }catch(Exception e){
                 System.out.println("No previous login attempts");
             }
@@ -112,6 +111,9 @@ public class AgentModel {
         return currentAgent;
     }
 
+    public String getFormattedServiceNumber(){
+        return String.format("%03d",currentAgent.getServiceNumber());
+    }
     public boolean isActive(){
         return currentAgent.getActive();
     }

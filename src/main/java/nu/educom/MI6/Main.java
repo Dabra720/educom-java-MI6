@@ -12,10 +12,10 @@ public class Main {
         DatabaseRepository repo = new DatabaseRepository();
         AgentModel model = new AgentModel(repo);
         Presentor presentor = new Presentor(view, model);
-//        presentor.run();
+        presentor.run();
 
 
-        presentor.test();
+//        presentor.test();
 
 //        // create a new connection from MySQLJDBCUtil
 //        try (Connection conn = MySQLJDBCUtil.getConnection()) {

@@ -11,6 +11,7 @@ import java.util.List;
 
 public class DatabaseRepository {
     protected Connection conn;
+    protected Session session = HibernateUtil.openSession();
 
 //    public PreparedStatement prepareAndBind(String sql, List params){
 //
@@ -18,6 +19,23 @@ public class DatabaseRepository {
 //    }
 
     public void insertLoginAttempt(LoginAttempt login){
+        System.out.println("Trying to insert login attempt..");
+//        try {
+//
+        session.beginTransaction();
+//        session.createQuery("insert into LoginAttempt(agent_id, successful) values(?, ?)")
+//                .setParameter(1, login.getServiceNumber())
+//                .setParameter(2, login.getSuccess())
+//                .executeUpdate();
+        session.persist(login);
+        session.getTransaction().commit();
+//        session.persist(login);
+//        }catch(Exception e){
+
+//            System.out.println(e);
+//        }
+    }
+    public void insertLoginAttempt2(LoginAttempt login){
         String sql = "INSERT INTO login_attempts (service_nr, success)" +
                         "VALUES(?, ?)";
 
@@ -36,28 +54,28 @@ public class DatabaseRepository {
     }
 
     public List<Agent> readAllAgents(){
-        Session session = HibernateUtil.openSession();
-        session.beginTransaction();
-        List<Agent> allAgents = session.createQuery("select * from agents", Agent.class)
+//        Session session = HibernateUtil.openSession();
+//        session.beginTransaction();
+        List<Agent> allAgents = session.createQuery("from agents", Agent.class)
                 .getResultList();
         for (Agent agent:allAgents ) {
-            System.out.println("Service-nr: " + agent.getFormattedServiceNumber());
-            System.out.println("Service-nr: " + agent.getPassPhrase());
-            System.out.println("Service-nr: " + agent.getActive());
+            System.out.println("Service-nr: " + agent.getServiceNumber());
+            System.out.println("Pass_phrase: " + agent.getPassPhrase());
+            System.out.println("Active: " + agent.getActive());
         }
-        session.getTransaction().commit();
-        session.close();
+//        session.getTransaction().commit();
+//        session.close();
         return allAgents;
     }
-    public Agent readHibernate(int serviceNr){
+    public Agent readAgentByServiceNumber(int serviceNr){
         Session session = HibernateUtil.openSession();
 
         Agent agent = session.createQuery("from Agent WHERE serviceNumber = :serviceNr", Agent.class)
                 .setParameter("serviceNr", serviceNr)
-                .uniqueResult();
+                .uniqueResultOptional().orElse(null);
         return agent;
     }
-    public Agent readAgentByServiceNumber(int serviceNr){
+    public Agent readAgentByServiceNumber2(int serviceNr){
         String sql = "SELECT * FROM agents WHERE service_nr=?";
         Agent agent = null;
         try (Connection conn = MySQLJDBCUtil.getConnection();

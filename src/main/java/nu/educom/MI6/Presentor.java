@@ -73,7 +73,7 @@ class Presentor extends Thread implements IPresentor {
         }else{
             model.printLoginAttempts();
             model.storeLoginAttempt(new LoginAttempt(model.getCurrentAgent().getServiceNumber(), true));
-            String message = "Welcome agent " + model.getCurrentAgent().getFormattedServiceNumber();
+            String message = "Welcome agent " + model.getFormattedServiceNumber();
             if(model.getCurrentAgent().getLicense_to_kill()!=null){
                 message += ("\nYour license to kill expires: " + model.getCurrentAgent().getLicense_to_kill());
             } else{

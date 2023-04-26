@@ -14,20 +14,20 @@ public class LoginAttempt {
     @GenericGenerator(name = "increment", strategy = "increment")
     private int id;
     @Column(name="service_nr")
-    private int agent_id;
+    private int serviceNumber;
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name="timestamp")
     private LocalDateTime loginDateTime = LocalDateTime.now();
     @Column(name="success")
-    private boolean succesful;
+    private boolean success;
 
 
     public LoginAttempt(int serviceNumber){
-        agent_id = serviceNumber;
+        this.serviceNumber = serviceNumber;
     }
     public LoginAttempt(int serviceNr, boolean success){
-        agent_id=serviceNr;
-        succesful=success;
+        serviceNumber =serviceNr;
+        this.success =success;
     }
     public LoginAttempt(){
 
@@ -40,7 +40,7 @@ public class LoginAttempt {
         return id;
     }
     public int getServiceNumber(){
-        return agent_id;
+        return serviceNumber;
     }
     public void setLoginDateTime(LocalDateTime logDate){
         this.loginDateTime = logDate;
@@ -49,11 +49,11 @@ public class LoginAttempt {
         return loginDateTime;
     }
 
-    public void setSuccesful(boolean succes){
-        succesful = succes;
+    public void setSuccess(boolean succes){
+        success = succes;
     }
     public boolean getSuccess(){
-        return succesful;
+        return success;
     }
 
 

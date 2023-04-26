@@ -1,8 +1,11 @@
 package nu.educom.MI6;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,23 +17,6 @@ public class AgentModel {
 
     public AgentModel(DatabaseRepository repo){
         this.repo = repo;
-    }
-
-    public void printAgentsList(){
-        Agents = repo.readAllAgents();
-
-        for (Agent agent:Agents ) {
-//            System.out.println("Service-nr: " + agent.getFormattedServiceNumber());
-            System.out.println("Service-nr: " + agent.getPassPhrase());
-            System.out.println("Service-nr: " + agent.getActive());
-        }
-    }
-    public void printAgent(int serviceNr){
-        System.out.println("Print agent: " + serviceNr);
-        Agent agent = getAgent(serviceNr);
-//        System.out.println("Service-nr: " + agent.getFormattedServiceNumber());
-        System.out.println("Service-nr: " + agent.getPassPhrase());
-        System.out.println("Service-nr: " + agent.getActive());
     }
 
     public void printLoginAttempts(){
@@ -103,11 +89,7 @@ public class AgentModel {
         currentAgent = repo.readAgentByServiceNumber(serviceNr);
         if(currentAgent!=null){
             System.out.println("Current Agent is now: " + getFormattedServiceNumber());
-//            try{
-                setLoginAttemptList();
-//            }catch(Exception e){
-//                System.out.println("No previous login attempts");
-//            }
+            setLoginAttemptList();
         }else {
             System.out.println("No CURRENT AGENT available");
         }
@@ -137,6 +119,10 @@ public class AgentModel {
             return false;
         }
 
+    }
+    public boolean isExpired(LocalDate date){
+        Period diff = LocalDate.now().until(date);
+        return diff.isNegative();
     }
 
     public boolean isNumeric(String str)

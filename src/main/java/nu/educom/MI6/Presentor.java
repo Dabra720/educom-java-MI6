@@ -1,11 +1,7 @@
 package nu.educom.MI6;
 
-import javax.swing.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
 class Presentor extends Thread implements IPresentor {
     IView theView;
     AgentModel model;
@@ -16,22 +12,14 @@ class Presentor extends Thread implements IPresentor {
         view.addPresentorListener(this);
         this.model = model;
     }
-    public AgentModel getModel(){
-        return model;
-    }
-    public IView getTheView(){
-        return theView;
-    }
 
     public void run(){
         while(running){
-//            System.out.println("run() thread name: " + Thread.currentThread().getName());
             try {
                 theView.triggerAskLogin();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-//            System.out.println("After asklogin Loop");
         }
         theView.close();
     }
@@ -45,8 +33,8 @@ class Presentor extends Thread implements IPresentor {
             Agent agent = model.validateServiceNumber(serviceNumber);
             if(agent==null){
                 theView.showMessage("ACCESS DENIED");
+
             }else{
-//                System.out.println("Seconds since last login:" + model.authenticateAgent());
                 if(model.authenticateAgent()<=0) { //Check for timout
                     handlePassword();
                 }else{
@@ -56,18 +44,10 @@ class Presentor extends Thread implements IPresentor {
             }
         }
     }
-    public void test(){
-//        System.out.println("Authenticate agent:");
-//        Agent agent = model.getAgent(2);
-//        System.out.println("Tijdverschil: " + model.authenticateAgent());
-        model.printAgentsList();
-    }
 
     public void handlePassword() {
         String passPhrase = theView.getPassPhrase();
-//        model.printAgentsList();
         if(!model.validatePass(passPhrase, model.getCurrentAgent())||!model.isActive()){
-//            model.addBlackList(model.getCurrentAgent().getServiceNumber());
             theView.showMessage("WRONG PASSWORD OR INACTIVE ACCOUNT \nTIMEOUT SET");
             model.storeLoginAttempt(new LoginAttempt(model.getCurrentAgent().getServiceNumber(), false));
         }else{
@@ -75,7 +55,12 @@ class Presentor extends Thread implements IPresentor {
             model.storeLoginAttempt(new LoginAttempt(model.getCurrentAgent().getServiceNumber(), true));
             String message = "Welcome agent " + model.getFormattedServiceNumber();
             if(model.getCurrentAgent().getLicense_to_kill()!=null){
-                message += ("\nYour license to kill expires: " + model.getCurrentAgent().getLicense_to_kill());
+                if(model.isExpired(model.getCurrentAgent().getLicense_to_kill())){
+                    message += "\nYour license has expired since " + model.getCurrentAgent().getLicense_to_kill();
+                }else{
+                    message += ("\nYour license to kill expires: " + model.getCurrentAgent().getLicense_to_kill());
+                }
+
             } else{
                 message += "\nYou do not have a license to kill";
             }

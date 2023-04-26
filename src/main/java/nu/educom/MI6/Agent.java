@@ -5,6 +5,7 @@ package nu.educom.MI6;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -21,9 +22,9 @@ public class Agent {
         private String passPhrase = "For ThE Royal QUEEN";
     @Column(name="active")
     private boolean active;
-    @Temporal(TemporalType.DATE)
+//    @Temporal(TemporalType.DATE)
     @Column(name="license_to_kill_date")
-    private Date license_to_kill_date = null;
+    private LocalDate license_to_kill_date = null;
 //    private ArrayList loginAttemptList;
 
     public Agent(int serviceNumber){
@@ -60,11 +61,11 @@ public class Agent {
     }
 
 
-    public void setLicenseToKill(Date date){
+    public void setLicenseToKill(LocalDate date){
             license_to_kill_date = date;
     }
 
-    public Date getLicense_to_kill(){
+    public LocalDate getLicense_to_kill(){
         return license_to_kill_date;
     }
 

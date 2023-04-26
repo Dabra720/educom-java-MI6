@@ -78,23 +78,14 @@ class JPanelView extends JFrame implements IView, ActionListener{
 
     @Override
     public void showMessage(String msg) {
-//        System.out.println(msg);
-//        title.setText(msg);
         if(SwingUtilities.isEventDispatchThread()){
             title.setText(msg);
         }else{
             SwingUtilities.invokeLater(
-                new Runnable() {
-                    @Override
-                    public void run() {
-//                        title.setText(msg);
-                        JOptionPane.showMessageDialog(getContentPane(), msg);
-                    }
-                }
+                    () -> JOptionPane.showMessageDialog(getContentPane(), msg)
             );
         }
     }
-
 
     @Override
     public void triggerAskLogin() throws InterruptedException {
@@ -108,13 +99,11 @@ class JPanelView extends JFrame implements IView, ActionListener{
             System.out.println("Starting doing action: handleLogin()");
 
             presentor.handleLogin();
-//            actionToDo = pendingActions.removeFirst();
-
-
         }
-//        System.out.println("Starting doing action: " + actionToDo);
-////        showMessage("Enter your number and password.");
+    }
 
+    public JTextField getNumberTxt(){
+        return numberTxt;
     }
 
     @Override

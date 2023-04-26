@@ -9,6 +9,7 @@ import java.util.List;
 public class AgentModel {
     private DatabaseRepository repo;
     private List<Agent> Agents = new ArrayList<>();
+    private List<LoginAttempt> loginAttempts = new ArrayList<>();
     private Agent currentAgent;
 
     public AgentModel(DatabaseRepository repo){
@@ -33,15 +34,21 @@ public class AgentModel {
     }
 
     public void printLoginAttempts(){
-        ArrayList<LoginAttempt> loginAttempts = currentAgent.getLoginAttemptList();
         for(LoginAttempt login:loginAttempts){
             System.out.println("Login Attempt: " + login.getLoginDateTime());
         }
     }
 
+    public void setLoginAttemptList(){
+        loginAttempts = repo.readFailedLoginAttempts(currentAgent);
+    }
+    public List getLoginAttemptList(){
+        return loginAttempts;
+    }
+
     public Double getTimeOut(){
 //        Math.pow() // Machtsberekening
-        double failedLoginAttempts = currentAgent.getLoginAttemptList().size();
+        double failedLoginAttempts = getLoginAttemptList().size();
         double defaultTimeOut = 60; // Seconden
 
         return defaultTimeOut * Math.pow(2, failedLoginAttempts);
@@ -57,9 +64,9 @@ public class AgentModel {
             dateAfterTimeOut = LocalDateTime.now();
         }
         long diff = LocalDateTime.now().until(dateAfterTimeOut, ChronoUnit.SECONDS);
-//        System.out.println("Nu: " + LocalDateTime.now());
-//        System.out.println("Timeout:  " + dateAfterTimeOut);
-//        System.out.println("Verschil tussen nu en timout: " + diff);
+        System.out.println("Nu: " + LocalDateTime.now());
+        System.out.println("Timeout:  " + dateAfterTimeOut);
+        System.out.println("Verschil tussen nu en timout: " + diff);
         return diff;
     }
     public void storeLoginAttempt(LoginAttempt login){
@@ -68,7 +75,6 @@ public class AgentModel {
 
     public LoginAttempt getLastLoginAttempt(){
         LoginAttempt login;
-        List<LoginAttempt> loginAttempts = repo.readFailedLoginAttempts(currentAgent);
         try{
             login = loginAttempts.get(loginAttempts.size() -1);
         }catch(Exception e){
@@ -97,11 +103,11 @@ public class AgentModel {
         currentAgent = repo.readAgentByServiceNumber(serviceNr);
         if(currentAgent!=null){
             System.out.println("Current Agent is now: " + getFormattedServiceNumber());
-            try{
-//                currentAgent.setLoginAttempts(repo.readFailedLoginAttempts(currentAgent));
-            }catch(Exception e){
-                System.out.println("No previous login attempts");
-            }
+//            try{
+                setLoginAttemptList();
+//            }catch(Exception e){
+//                System.out.println("No previous login attempts");
+//            }
         }else {
             System.out.println("No CURRENT AGENT available");
         }

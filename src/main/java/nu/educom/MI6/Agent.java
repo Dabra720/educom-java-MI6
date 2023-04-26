@@ -72,16 +72,4 @@ public class Agent {
         return this.serviceNumber;
     }
 
-//    public String getFormattedServiceNumber(){
-//        return String.format("%03d",service_number);
-//    }
-
-    public ArrayList getLoginAttemptList(){
-        ArrayList <LoginAttempt> loginAttemptList = new ArrayList<LoginAttempt>();
-        return loginAttemptList;
-    }
-//    public void setLoginAttempts(ArrayList loginAttempts){
-//        loginAttemptList = loginAttempts;
-//    }
-
 }

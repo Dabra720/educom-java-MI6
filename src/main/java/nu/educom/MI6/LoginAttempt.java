@@ -29,6 +29,9 @@ public class LoginAttempt {
         agent_id=serviceNr;
         succesful=success;
     }
+    public LoginAttempt(){
+
+    }
 
     public void setId(int id){
         this.id = id;

@@ -131,7 +131,7 @@ class JPanelView extends JFrame implements IView, ActionListener{
     }
 
     public void actionPerformed(ActionEvent e){
-        synchronized (myLockObj) {
+
             serviceNumber = numberTxt.getText();
             passPhrase = passTxt.getText();
             if (serviceNumber.isEmpty()) {
@@ -139,13 +139,14 @@ class JPanelView extends JFrame implements IView, ActionListener{
             } else if(passPhrase.isEmpty()) {
                 title.setText("Please enter a password");
             }else{
-                title.setText("");
-                System.out.println("Ready op TRUE");
-                ready = true;
-                myLockObj.notifyAll();
-
+                synchronized (myLockObj) {
+                    title.setText("");
+                    System.out.println("Ready op TRUE");
+                    ready = true;
+                    myLockObj.notifyAll();
+                }
             }
 
-        }
+
     }
 }

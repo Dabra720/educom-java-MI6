@@ -17,5 +17,10 @@
     <orderEntry type="library" name="required" level="application" />
     <orderEntry type="library" name="spatial" level="application" />
     <orderEntry type="library" name="optional" level="application" />
+    <orderEntry type="library" name="envers" level="project" />
+    <orderEntry type="library" name="jpa-metamodel-generator" level="project" />
+    <orderEntry type="library" name="optional" level="project" />
+    <orderEntry type="library" name="required" level="project" />
+    <orderEntry type="library" name="spatial" level="project" />
   </component>
 </module>

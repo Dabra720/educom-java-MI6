@@ -5,13 +5,11 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 public class AgentModel {
     private DatabaseRepository repo;
-    private List<Agent> Agents = new ArrayList<>();
+//    private List<Agent> Agents = new ArrayList<>();
     private List<LoginAttempt> loginAttempts = new ArrayList<>();
     private Agent currentAgent;
 
@@ -75,12 +73,14 @@ public class AgentModel {
         int agent_id = Integer.parseInt(serviceNr);
             try{
                 agent = getAgent(agent_id);
-                Agents.add(agent);
+//                Agents.add(agent);
+                System.out.println("Agent-ID: " + agent.getId());
             }catch(Exception e){
                 System.out.printf("Error: " + e.getMessage());
                 System.out.println("Not an existing number.");
             }
         return agent;
+//        return repo.readAgentByServiceNumber(agent_id);
     }
 
 
@@ -93,7 +93,7 @@ public class AgentModel {
         }else {
             System.out.println("No CURRENT AGENT available");
         }
-        return getCurrentAgent();
+        return currentAgent;
     }
     public Agent getCurrentAgent(){
         return currentAgent;

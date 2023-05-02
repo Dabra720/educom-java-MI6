@@ -13,7 +13,7 @@ public class Main {
         AgentModel model = new AgentModel(repo);
         Presentor presentor = new Presentor(view, model);
         presentor.run();
-
+        repo.session.close();
 
 //        presentor.test();
 

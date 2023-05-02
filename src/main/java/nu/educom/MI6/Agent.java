@@ -1,13 +1,8 @@
 package nu.educom.MI6;
 
-//import java.awt.*;
-
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 
 @Entity
 @Table(name="agents")
@@ -22,10 +17,8 @@ public class Agent {
         private String passPhrase = "For ThE Royal QUEEN";
     @Column(name="active")
     private boolean active;
-//    @Temporal(TemporalType.DATE)
     @Column(name="license_to_kill_date")
     private LocalDate license_to_kill_date = null;
-//    private ArrayList loginAttemptList;
 
     public Agent(int serviceNumber){
         this.serviceNumber = serviceNumber;

@@ -15,8 +15,9 @@ public class LoginAttempt {
     private int id;
     @Column(name="service_nr")
     private int serviceNumber;
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name="timestamp")
+//    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name="login_time")
+    @Convert(converter = LocalDateConverter.class)
     private LocalDateTime loginDateTime = LocalDateTime.now();
     @Column(name="success")
     private boolean success;
@@ -49,8 +50,8 @@ public class LoginAttempt {
         return loginDateTime;
     }
 
-    public void setSuccess(boolean succes){
-        success = succes;
+    public void setSuccess(boolean success){
+        this.success = success;
     }
     public boolean getSuccess(){
         return success;

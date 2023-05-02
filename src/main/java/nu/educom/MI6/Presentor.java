@@ -30,10 +30,9 @@ class Presentor extends Thread implements IPresentor {
         if(!model.validNumber(serviceNumber)){
             theView.showMessage("Enemy");
         }else{
-            Agent agent = model.validateServiceNumber(serviceNumber);
+            Agent agent = model.validateServiceNumber(serviceNumber); //Check if id exists
             if(agent==null){
                 theView.showMessage("ACCESS DENIED");
-
             }else{
                 if(model.authenticateAgent()<=0) { //Check for timout
                     handlePassword();
